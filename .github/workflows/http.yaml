@@ -20,4 +20,7 @@ jobs:
     - uses: actions/setup-go@v3
       with:
         go-version: "1.18.0"
-    - run: go run .
+    - name: Run script
+      run: |
+        go run . &
+        sleep 5
