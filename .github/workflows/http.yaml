@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
     - name: Test script
-      run: timeout 20 go run .
+      run: go run .
     - name: Check HTTP
       run: |
         go run . &
