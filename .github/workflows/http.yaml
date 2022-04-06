@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
     - name: Test script
-      run: timeout 30 go run .
+      run: timeout 15 go run . || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
     - name: Check HTTP
       run: |
         go run . &
