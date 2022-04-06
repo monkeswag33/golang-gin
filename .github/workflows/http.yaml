@@ -5,6 +5,9 @@ jobs:
   container-job:
     runs-on: ubuntu-latest
     container: node:latest
+    env:
+      POSTGRES_URI: 'postgres://postgres:postgres@postgres:5432/postgres'
+      PORT: 8080
     services:
       postgres:
         image: postgres
