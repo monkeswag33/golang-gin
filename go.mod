@@ -1,4 +1,4 @@
-module ishank/webserver
+module github.com/monkeswag33/golang-gin
 
 go 1.18
 

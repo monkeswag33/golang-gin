@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"ishank/webserver/src/routes"
 	"log"
 	"os"
+
+	"github.com/monkeswag33/golang-gin/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -35,6 +36,8 @@ func main() {
 	if PORT == "" {
 		log.Println("Could not find PORT, using default port 8080")
 		PORT = "8080"
+	} else {
+		fmt.Println("Found PORT: " + PORT)
 	}
 	var router *gin.Engine = gin.New()
 	if os.Getenv("GIN_MODE") == "debug" || os.Getenv("GIN_MODE") == "" {
