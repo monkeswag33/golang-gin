@@ -10,7 +10,7 @@ jobs:
       PORT: 8080
     services:
       postgres:
-        image: postgres
+        image: monkeswag33/golang-postgres
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
