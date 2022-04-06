@@ -25,7 +25,7 @@ func initDB(context context.Context) *pgxpool.Pool {
 	return dbPool
 }
 
-func main() {
+func main1() {
 	var context context.Context = context.Background()
 	var dbPool *pgxpool.Pool = initDB(context)
 	defer dbPool.Close()

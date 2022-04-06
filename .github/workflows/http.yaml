@@ -17,12 +17,7 @@ jobs:
           --health-retries 5
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v3
+    - uses: actions/setup-go@v3
       with:
-        python-version: '3.9'
-    - name: Install dependencies
-      run: |
-        if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
-    - name: Run script
-      run: python main.py
-    
+        go-version: "1.18.0"
+    - run: go version
