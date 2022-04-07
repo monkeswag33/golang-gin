@@ -1,4 +1,4 @@
-name: PostgreSQL Service
+name: Test Gin Code
 on: push
 
 jobs:
