@@ -6,8 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [1.17.x, 1.18.x]
-    name: Go ${{ matrix.go }} Code
+        go: [1.18.x]
+    name: Go ${{ matrix.go }}
     env:
       POSTGRES_URI: 'postgres://postgres:postgres@postgres:5432/postgres'
       PORT: 8080
