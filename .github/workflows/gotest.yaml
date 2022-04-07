@@ -4,6 +4,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: golang:latest
     strategy:
       matrix:
         go: [1.18.x]
