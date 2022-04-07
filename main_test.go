@@ -39,6 +39,15 @@ func validateJSON(str string) error {
 	return json.Unmarshal([]byte(str), &js)
 }
 
+func containsMap(mapA map[string]interface{}, mapB map[string]interface{}) bool {
+	for key := range mapB {
+		if mapA[key] != mapB[key] {
+			return false
+		}
+	}
+	return true
+}
+
 func TestGET(t *testing.T) {
 	var w *httptest.ResponseRecorder = httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/get", nil)
@@ -73,7 +82,7 @@ func TestPOST(t *testing.T) {
 	var insertedSuccessfully bool = false
 	for _, user := range users {
 		if user["id"] == id {
-			if user["firstname"] == "User1" && user["lastname"] == "User2" {
+			if containsMap(user, mcPostBody) {
 				insertedSuccessfully = true
 			}
 		}
@@ -89,8 +98,6 @@ func TestPOST(t *testing.T) {
 	assert.Nil(t, validateJSON(w.Body.String()))
 	var deletedUser map[string]interface{} = map[string]interface{}{}
 	json.Unmarshal(w.Body.Bytes(), &deletedUser)
-	fmt.Println(deletedUser)
-	fmt.Println(insertedUser)
 	var eq bool = reflect.DeepEqual(deletedUser, insertedUser)
 	if !eq {
 		t.Fatalf("Inserted user and deleted user are not the same")
@@ -108,6 +115,26 @@ func TestUpdate(t *testing.T) {
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Nil(t, validateJSON(w.Body.String()))
-	// Check that user was updated
-
+	var updatedUser map[string]interface{} = map[string]interface{}{}
+	json.Unmarshal(w.Body.Bytes(), &updatedUser)
+	var id float64 = updatedUser["id"].(float64)
+	// Check user was updated
+	w = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/get", nil)
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, validateJSON(w.Body.String()))
+	var users []map[string]interface{} = make([]map[string]interface{}, 0)
+	json.Unmarshal(w.Body.Bytes(), &users)
+	var updatedSuccessfully bool = false
+	for _, user := range users {
+		if user["id"] == id {
+			if containsMap(user, mcPostBody) {
+				updatedSuccessfully = true
+			}
+		}
+	}
+	if !updatedSuccessfully {
+		t.Fatalf("Not inserted successfully")
+	}
 }
