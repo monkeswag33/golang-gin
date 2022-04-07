@@ -1,6 +1,6 @@
 module github.com/monkeswag33/golang-gin
 
-go 1.12
+go 1.13
 
 require (
 	github.com/georgysavva/scany v0.3.0
