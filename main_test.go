@@ -138,3 +138,31 @@ func TestUpdate(t *testing.T) {
 		t.Fatalf("Not inserted successfully")
 	}
 }
+
+func TestDelete(t *testing.T) {
+	var w *httptest.ResponseRecorder = httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/delete/"+fmt.Sprint(insertedId), nil)
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, validateJSON(w.Body.String()))
+	var deletedUser map[string]interface{} = map[string]interface{}{}
+	json.Unmarshal(w.Body.Bytes(), &deletedUser)
+	var deletedId float64 = deletedUser["id"].(float64)
+	// Check that user was deleted
+	w = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/get", nil)
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, validateJSON(w.Body.String()))
+	var users []map[string]interface{} = make([]map[string]interface{}, 0)
+	json.Unmarshal(w.Body.Bytes(), &users)
+	var deletedSuccessfully = true
+	for _, user := range users {
+		if user["id"] == deletedId {
+			deletedSuccessfully = false
+		}
+	}
+	if !deletedSuccessfully {
+		t.Fatalf("Not deleted successfully")
+	}
+}
