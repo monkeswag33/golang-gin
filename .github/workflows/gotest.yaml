@@ -26,9 +26,5 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
     - name: Test script
-      run: /bin/bash -c 'timeout 15 go run . || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi'
-    - name: Check HTTP
-      run: |
-        go run . &
-        sleep 5
-        curl -L http://localhost:8080/get
+      timeout-minutes: 5
+      run: go test
