@@ -25,13 +25,11 @@ func initDB(context context.Context) *pgxpool.Pool {
 	return dbPool
 }
 
-func main() {
+func SetupRouter() (*gin.Engine, *pgxpool.Pool, string) {
 	var context context.Context = context.Background()
 	var dbPool *pgxpool.Pool = initDB(context)
-	defer dbPool.Close()
 	routes.DbPool = dbPool
 	routes.Context = context
-
 	var PORT string = os.Getenv("PORT")
 	if PORT == "" {
 		log.Println("Could not find PORT, using default port 8080")
@@ -46,5 +44,11 @@ func main() {
 	router.Use(gin.Recovery())
 	router.SetTrustedProxies([]string{"0.0.0.0"})
 	routes.Routes(router)
-	router.Run(fmt.Sprintf(":%s", PORT))
+	return router, dbPool, fmt.Sprintf(":%s", PORT)
+}
+
+func main() {
+	router, pool, PORT := SetupRouter()
+	defer pool.Close()
+	router.Run(PORT)
 }

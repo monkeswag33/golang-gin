@@ -48,6 +48,7 @@ func PostHandler(ctx *gin.Context) {
 	createdRow, _ := DbPool.Query(Context, "INSERT INTO mytable (firstname, lastname) VALUES ($1, $2) RETURNING *", user.Firstname, user.Lastname)
 	var createdUser User
 	if err := pgxscan.ScanOne(&createdUser, createdRow); err != nil {
+		fmt.Println(err)
 		log.Fatal("Error processing rows")
 	}
 	ctx.JSON(http.StatusCreated, createdUser)
