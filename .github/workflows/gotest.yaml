@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Go ${{ matrix.go-version }}
     env:
-      POSTGRES_URI: 'postgres://postgres:postgres@postgres:5432/postgres'
+      POSTGRES_URI: 'postgres://postgres:postgres@localhost:5432/postgres'
       PORT: 8080
       GIN_MODE: release
     services:
