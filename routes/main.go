@@ -1,20 +1,11 @@
 package routes
 
 import (
-	"context"
-
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"gorm.io/gorm"
 )
 
-var DbPool *pgxpool.Pool
-var Context context.Context
-
-type User struct {
-	ID        int    `json:"id"`
-	Firstname string `json:"firstname,omitempty"`
-	Lastname  string `json:"lastname,omitempty"`
-}
+var Db *gorm.DB
 
 func Routes(router *gin.Engine) {
 	var routerGroup *gin.RouterGroup = router.Group("/")

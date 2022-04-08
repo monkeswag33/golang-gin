@@ -1,35 +1,35 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
 
+	"github.com/monkeswag33/golang-gin/global"
 	"github.com/monkeswag33/golang-gin/routes"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func initDB(context context.Context) *pgxpool.Pool {
+func initDB() *gorm.DB {
 	var databaseUri string = os.Getenv("POSTGRES_URI")
 	if len(databaseUri) == 0 {
 		log.Fatal("Could not find POSTGRES_URI environment variable")
 	}
 	fmt.Println("Found POSTGRES_URI: " + databaseUri)
-	dbPool, err := pgxpool.Connect(context, databaseUri)
+	db, err := gorm.Open(postgres.Open(databaseUri), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error while connecting to database")
 	}
-	return dbPool
+	db.AutoMigrate(&global.User{})
+	return db
 }
 
-func SetupRouter() (*gin.Engine, *pgxpool.Pool, string) {
-	var context context.Context = context.Background()
-	var dbPool *pgxpool.Pool = initDB(context)
-	routes.DbPool = dbPool
-	routes.Context = context
+func SetupRouter() (*gin.Engine, *gorm.DB, string) {
+	var db *gorm.DB = initDB()
+	routes.Db = db
 	var PORT string = os.Getenv("PORT")
 	if PORT == "" {
 		log.Println("Could not find PORT, using default port 8080")
@@ -44,11 +44,10 @@ func SetupRouter() (*gin.Engine, *pgxpool.Pool, string) {
 	router.Use(gin.Recovery())
 	router.SetTrustedProxies([]string{"0.0.0.0"})
 	routes.Routes(router)
-	return router, dbPool, fmt.Sprintf(":%s", PORT)
+	return router, db, fmt.Sprintf(":%s", PORT)
 }
 
 func main() {
-	router, pool, PORT := SetupRouter()
-	defer pool.Close()
+	router, _, PORT := SetupRouter()
 	router.Run(PORT)
 }
