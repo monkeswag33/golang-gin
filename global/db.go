@@ -1,7 +1,7 @@
 package global
 
 type User struct {
-	ID        int
-	Firstname string
-	Lastname  string
+	ID        int    `json:"id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
 }
