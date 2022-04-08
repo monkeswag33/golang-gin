@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"gorm.io/gorm"
 )
 
-var DbPool *pgxpool.Pool
+var DbPool *gorm.DB
 var Context context.Context
 
 type User struct {

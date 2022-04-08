@@ -34,7 +34,6 @@ func genUpdateSQL(jsonMap map[string]interface{}, id string) (string, []interfac
 
 func GetHandler(ctx *gin.Context) {
 	var users []*User = make([]*User, 0)
-	pgxscan.Select(Context, DbPool, &users, "SELECT * FROM mytable")
 	ctx.JSON(http.StatusOK, users)
 }
 
