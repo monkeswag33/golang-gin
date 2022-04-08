@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/monkeswag33/golang-gin/global"
 	"github.com/monkeswag33/golang-gin/routes"
@@ -12,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func initDB() *gorm.DB {
@@ -21,17 +19,7 @@ func initDB() *gorm.DB {
 		log.Fatal("Could not find POSTGRES_URI environment variable")
 	}
 	fmt.Println("Found POSTGRES_URI: " + databaseUri)
-	var newLogger logger.Interface = logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags),
-		logger.Config{
-			SlowThreshold: time.Second,
-			LogLevel:      logger.Info,
-			Colorful:      true,
-		},
-	)
-	db, err := gorm.Open(postgres.Open(databaseUri), &gorm.Config{
-		Logger: newLogger,
-	})
+	db, err := gorm.Open(postgres.Open(databaseUri), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error while connecting to database")
 	}
