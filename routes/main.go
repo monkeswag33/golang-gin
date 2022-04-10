@@ -9,6 +9,7 @@ var Db *gorm.DB
 
 func Routes(router *gin.Engine) {
 	var routerGroup *gin.RouterGroup = router.Group("/")
+	routerGroup.GET("/ping", PingHandler)
 	routerGroup.GET("/get", GetHandler)
 	routerGroup.POST("/post", PostHandler)
 	routerGroup.PATCH("/update/:id", UpdateHandler)

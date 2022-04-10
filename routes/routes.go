@@ -9,6 +9,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+func PingHandler(ctx *gin.Context) {
+	ctx.String(http.StatusOK, "OK")
+}
+
 func GetHandler(ctx *gin.Context) {
 	var users []global.User
 	Db.Find(&users)
