@@ -60,7 +60,7 @@ func SetupRouter() (*gin.Engine, *gorm.DB, string) {
 		logger.Warn("Could not find PORT, using default port 8080")
 		PORT = "8080"
 	} else {
-		fmt.Println("Found PORT: " + PORT)
+		logger.Info("Found PORT: " + PORT)
 	}
 	var router *gin.Engine = gin.New()
 	if os.Getenv("GIN_MODE") == "debug" || os.Getenv("GIN_MODE") == "" {

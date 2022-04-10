@@ -1,13 +1,12 @@
 package routes
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/monkeswag33/golang-gin/global"
+	logger "github.com/sirupsen/logrus"
 )
 
 func GetHandler(ctx *gin.Context) {
@@ -19,8 +18,7 @@ func GetHandler(ctx *gin.Context) {
 func PostHandler(ctx *gin.Context) {
 	var user global.User
 	if err := ctx.BindJSON(&user); err != nil {
-		fmt.Println(err)
-		log.Fatal("Error converting JSON body to struct")
+		logger.Fatal("Error converting JSON body to struct: ", err)
 	}
 	Db.Create(&user)
 	ctx.JSON(http.StatusCreated, user)
@@ -30,8 +28,7 @@ func UpdateHandler(ctx *gin.Context) {
 	var user global.User
 	var updates map[string]interface{}
 	if err := ctx.BindJSON(&updates); err != nil {
-		fmt.Println(err)
-		log.Fatal("Error while converting JSON body to struct")
+		logger.Fatal("Error while converting JSON body to struct: ", err)
 	}
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	Db.Find(&user, id)
