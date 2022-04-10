@@ -38,6 +38,14 @@ func validateJSON(str string) error {
 	return json.Unmarshal([]byte(str), &js)
 }
 
+func TestPing(t *testing.T) {
+	var w *httptest.ResponseRecorder = httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/ping", nil)
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "OK", w.Body.String())
+}
+
 func TestGET(t *testing.T) {
 	var w *httptest.ResponseRecorder = httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/get", nil)
